@@ -36,6 +36,7 @@ cd omen-fan-control
 You must install kernel headers and build tools for the driver patch to compile.
 *   **Arch:** `pacman -S linux-headers base-devel`
 *   **Debian/Ubuntu:** `apt install linux-headers-$(uname -r) build-essential`
+*   **CachyOS / Clang Kernels:** The Makefile detects if your kernel was built with Clang/LLVM and passes the correct `LLVM=1` flags to the build system. No extra configuration is needed.
 
 **2. Python Dependencies**
 You can install the required Python packages (`click`, `PyQt6`) via your package manager OR pip, preferably with a virtual environment.

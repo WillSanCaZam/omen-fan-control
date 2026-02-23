@@ -1,11 +1,19 @@
 obj-m += hp-wmi.o
 
+KVERSION ?= $(shell uname -r)
+KERNEL_BUILD ?= /lib/modules/$(KVERSION)/build
+
+# Check if the kernel was built with clang
+ifeq ($(shell grep -q "CONFIG_CC_IS_CLANG=y" $(KERNEL_BUILD)/include/config/auto.conf 2>/dev/null && echo yes),yes)
+    MAKE_OPTS += LLVM=1
+endif
+
 all:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+	$(MAKE) -C $(KERNEL_BUILD) M=$(CURDIR) $(MAKE_OPTS) modules
 
 clean:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+	$(MAKE) -C $(KERNEL_BUILD) M=$(CURDIR) $(MAKE_OPTS) clean
 
 install:
-	sudo cp hp-wmi.ko /lib/modules/$(shell uname -r)/kernel/drivers/platform/x86/hp/hp-wmi.ko.xz
+	sudo cp hp-wmi.ko /lib/modules/$(KVERSION)/kernel/drivers/platform/x86/hp/hp-wmi.ko
 	sudo depmod -a
