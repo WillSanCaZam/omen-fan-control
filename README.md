@@ -35,7 +35,10 @@ cd omen-fan-control
 **1. System Dependencies**
 You must install kernel headers and build tools for the driver patch to compile.
 *   **Arch:** `pacman -S linux-headers base-devel`
-*   **Debian/Ubuntu:** `apt install linux-headers-$(uname -r) build-essential`
+*   **Debian/Ubuntu:** `apt install linux-headers-$(uname -r) linux-headers-$(uname -r | sed 's/-[^-]*$/-common/') build-essential`
+
+    > **Note:** Debian splits kernel headers into two packages: an arch-specific one (`linux-headers-<version>-amd64`) and a common one (`linux-headers-<version>-common`) that provides `scripts/`, `include/config/`, etc. Both must be installed for the module build to succeed.
+
 *   **CachyOS / Clang Kernels:** The Makefile detects if your kernel was built with Clang/LLVM and passes the correct `LLVM=1` flags to the build system. No extra configuration is needed.
 
 **2. Python Dependencies**
