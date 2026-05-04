@@ -1,0 +1,16 @@
+[Unit]
+Description=Verify HP Omen Fan Control Driver
+Documentation=https://github.com/WillSanCaZam/omen-fan-control
+After=multi-user.target
+ConditionPathExists=/sys/devices/platform/hp-wmi
+ConditionPathExists=/dev/hp-wmi
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/hp-wmi-omen-verify.sh
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=hp-wmi-omen-verify
+
+[Install]
+WantedBy=multi-user.target

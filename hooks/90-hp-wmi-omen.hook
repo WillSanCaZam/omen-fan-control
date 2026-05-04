@@ -2,14 +2,20 @@
 Operation = Install
 Operation = Upgrade
 Type = Package
+# CachyOS kernels
+Target = linux-cachyos
+Target = linux-cachyos-lts
+Target = linux-cachyos-rc
+# Standard Arch kernels (fallback)
 Target = linux
 Target = linux-lts
 Target = linux-zen
 Target = linux-hardened
 
 [Action]
-Description = Rebuilding hp-wmi-omen module...
+Description = Rebuilding HP Omen Fan Control driver...
 When = PostTransaction
-Exec = /bin/bash -c 'cd /usr/src/hp-wmi-omen && for kver in /lib/modules/*/; do kver=$(basename "$kver"); if [ -d "/lib/modules/$kver/build" ]; then make clean KVERSION=$kver && make KVERSION=$kver && install -Dm644 hp-wmi.ko /lib/modules/$kver/kernel/drivers/platform/x86/hp/hp-wmi.ko && depmod -a $kver; fi; done'
+Exec = /bin/bash -c 'echo "[$(date)] Starting DKMS rebuild for hp-wmi-omen..." >> /var/log/hp-wmi-omen-dkms.log; dkms autoinstall -k $kernelver 2>&1 | tee -a /var/log/hp-wmi-omen-dkms.log; if [ $? -eq 0 ]; then echo "[$(date)] DKMS rebuild SUCCESS" >> /var/log/hp-wmi-omen-dkms.log; else echo "[$(date)] DKMS rebuild FAILED" >> /var/log/hp-wmi-omen-dkms.log; fi'
+Depends = dkms
 Depends = make
 Depends = linux-headers
