@@ -1,14 +1,11 @@
 [Unit]
-Description=Periodic verification of HP Omen Fan Control Driver
+Description=Verify HP Omen Fan Control Driver (Hourly)
 Documentation=https://github.com/WillSanCaZam/omen-fan-control
 
 [Timer]
-# Run every hour
 OnCalendar=hourly
-# Run immediately if timer was missed (e.g., system was off)
 Persistent=true
-# Randomize startup by up to 5 minutes to avoid system load spikes
-RandomizedDelaySec=300
+RandomizedDelaySec=5m
 AccuracySec=1s
 
 [Install]
